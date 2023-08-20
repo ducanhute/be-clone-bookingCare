@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Data</title>
+</head>
+<style>
+    table,
+    th,
+    td {
+        border: 1px solid black;
+        border-collapse: collapse;
+    }
+
+    .btn-edit {
+        color: rgb(255, 255, 255);
+        margin-right: 5px;
+        font-weight: 600;
+        font-size: 18px;
+        background-color: rgba(233, 173, 9, 1);
+        border-radius: 10px;
+        border: none;
+        cursor: pointer;
+        display: inline-block;
+        text-decoration: none;
+        padding: 3px;
+    }
+
+    .btn-delete {
+        color: rgb(255, 255, 255);
+        font-weight: 600;
+        padding: 3px;
+        background-color: rgba(245, 8, 8, 0.8);
+        border-radius: 10px;
+        font-size: 18px;
+        border: none;
+        cursor: pointer;
+        display: inline-block;
+        text-decoration: none;
+
+    }
+</style>
+
+<body>
+    <table style="width:100%">
+        <tr>
+            <th>Email</th>
+            <th>FirstName</th>
+            <th>LastName</th>
+            <th>Address</th>
+            <th>Action</th>
+
+        </tr>
+        <% for(let i=0; i < dataTable.length; i++) { %>
+            <tr style="text-align: center;">
+                <td style="text-align:left ;">
+                    <%= dataTable[i].email %>
+                </td>
+                <td>
+                    <%= dataTable[i].firstName %>
+                </td>
+                <td>
+                    <%= dataTable[i].lastName %>
+                </td>
+                <td>
+                    <%= dataTable[i].address %>
+                </td>
+                <td>
+                    <a href="/edit-crud?id= <%= dataTable[i].id %>" class="btn-edit" type="button">Edit</a>
+                    <a href="/delete-crud?id= <%= dataTable[i].id %>" class="btn-delete" type="button">Delete</a>
+                </td>
+            </tr>
+            <% } %>
+    </table>
+</body>
+
+</html>

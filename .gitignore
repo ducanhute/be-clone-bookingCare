@@ -1,0 +1,8 @@
+# bỏ qua các file này khi push code
+# Khi sử dụng PHP với lavarel sẽ có thư mục vendor
+# hai thư mục idea chứa cache
+/node_modules
+/vendor
+/.idea 
+.idea/
+.env
