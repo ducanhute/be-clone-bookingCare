@@ -169,6 +169,17 @@ let getDetailDoctorById = (id) => {
                         { model: db.Markdown, attributes: ["description", "contentMarkdown", "contentHTML"] },
                         { model: db.Allcode, as: "positionData", attributes: ["valueEn", "valueVi"] },
                         { model: db.Allcode, as: "genderData", attributes: ["valueEn", "valueVi"] },
+                        {
+                            model: db.Doctor_Info,
+                            attributes: {
+                                exclude: ["id", "doctorId"],
+                            },
+                            include: [
+                                { model: db.Allcode, as: "priceData" },
+                                { model: db.Allcode, as: "paymentData" },
+                                { model: db.Allcode, as: "provinceData" },
+                            ],
+                        },
                     ],
                     raw: true,
                     nest: true,
@@ -176,6 +187,9 @@ let getDetailDoctorById = (id) => {
                 if (data && data.image) {
                     let imageBase64 = new Buffer(data.image, "base64").toString("binary");
                     data.image = imageBase64;
+                }
+                if (!data) {
+                    data = {};
                 }
                 resolve({
                     errCode: 0,
@@ -209,22 +223,9 @@ let bulkCreateSchedule = (data) => {
                     attributes: ["timeType", "date", "doctorId", "maxNumber"],
                     raw: true,
                 });
-<<<<<<< HEAD
                 // Compare client data with existing records
                 let toCreate = _.differenceWith(schedule, existingRecords, (a, b) => {
                     return a.timeType === b.timeType && a.date === +b.date;
-=======
-                // Convert date
-                if (existingRecords && existingRecords.length > 0) {
-                    existingRecords = existingRecords.map((item) => {
-                        item.date = new Date(item.date).getTime();
-                        return item;
-                    });
-                }
-                // Compare client data with existing records
-                let toCreate = _.differenceWith(schedule, existingRecords, (a, b) => {
-                    return a.timeType === b.timeType && a.date === b.date;
->>>>>>> 888ab8f5da1a5ab21d05e41ffd621e070c3b8d15
                 });
                 // If have the difference then save to database
                 if (toCreate && toCreate.length > 0) {
@@ -259,7 +260,6 @@ let getScheduleByDate = (doctorId, date) => {
                         doctorId: doctorId,
                         date: date,
                     },
-<<<<<<< HEAD
                     include: [
                         {
                             model: db.Allcode,
@@ -269,8 +269,6 @@ let getScheduleByDate = (doctorId, date) => {
                     ],
                     raw: false,
                     nest: true,
-=======
->>>>>>> 888ab8f5da1a5ab21d05e41ffd621e070c3b8d15
                 });
                 if (!data) data = [];
                 resolve({
@@ -283,6 +281,41 @@ let getScheduleByDate = (doctorId, date) => {
         }
     });
 };
+let getExtraDoctorInfoById = (doctorId) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            if (!doctorId) {
+                resolve({
+                    errCode: 1,
+                    errMessage: "Missing required parameter",
+                });
+            } else {
+                let data = await db.Doctor_Info.findOne({
+                    where: {
+                        doctorId: doctorId,
+                    },
+                    include: [
+                        { model: db.Allcode, as: "priceData" },
+                        { model: db.Allcode, as: "paymentData" },
+                    ],
+                    attributes: {
+                        exclude: ["id", "doctorId"],
+                    },
+                    raw: false,
+                    nest: true,
+                });
+                if (!data) data = [];
+                resolve({
+                    errCode: 0,
+                    data: data,
+                });
+            }
+        } catch (error) {
+            console.log(error);
+        }
+    });
+};
+
 module.exports = {
     getTopDoctorHome,
     getAllDoctor,
@@ -290,4 +323,5 @@ module.exports = {
     getDetailDoctorById,
     bulkCreateSchedule,
     getScheduleByDate,
+    getExtraDoctorInfoById,
 };
