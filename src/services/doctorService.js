@@ -57,38 +57,93 @@ let getAllDoctor = () => {
 let saveDetailInforDoctor = (data) => {
     return new Promise(async (resolve, reject) => {
         try {
-            if (!data.doctorId || !data.contentHTML || !data.contentMarkdown || !data.action) {
-                resolve({
-                    errCode: 1,
-                    errMessage: "Missing required parameter",
-                });
-            } else {
-                if (data.action === CRUD_ACTIONS.CREATE) {
-                    await db.Markdown.create({
-                        contentHTML: data.contentHTML,
-                        contentMarkdown: data.contentMarkdown,
-                        description: data.description,
-                        doctorId: data.doctorId,
+            let dataField = [
+                "contentHTML",
+                "contentMarkdown",
+                "description",
+                "doctorId",
+                "action",
+                "selectedPrice",
+                "selectedPayment",
+                "selectedProvince",
+                "clinicName",
+                "clinicAddress",
+                "note",
+            ];
+            let errMessageField = [
+                "Content Markdown",
+                "Content Markdown",
+                "Introduction information",
+                "Choose your doctor",
+                "Action",
+                "Price",
+                "Payment method",
+                "Choose doctor's province",
+                "Clinic Name",
+                "Clinic Address",
+                "Note",
+            ];
+            for (let i = 0; i < dataField.length; i++) {
+                if (!data[dataField[i]]) {
+                    resolve({
+                        errCode: 1,
+                        errMessage: `Missing ${errMessageField[i]} field`,
                     });
-                } else if (data.action === CRUD_ACTIONS.EDIT) {
-                    let doctorMarkdown = await db.Markdown.findOne({
-                        where: { doctorId: data.doctorId },
-                        raw: false,
-                    });
-                    console.log("Check doctorMarkdown", doctorMarkdown);
-                    if (doctorMarkdown) {
-                        (doctorMarkdown.contentHTML = data.contentHTML),
-                            (doctorMarkdown.contentMarkdown = data.contentMarkdown),
-                            (doctorMarkdown.description = data.description),
-                            // (doctorMarkdown.updatedAt = new Date()),
-                            await doctorMarkdown.save();
-                    }
                 }
-                resolve({
-                    errCode: 0,
-                    errMessage: "Save information doctor successfully",
+            }
+            // upset markdown table
+            if (data.action === CRUD_ACTIONS.CREATE) {
+                await db.Markdown.create({
+                    contentHTML: data.contentHTML,
+                    contentMarkdown: data.contentMarkdown,
+                    description: data.description,
+                    doctorId: data.doctorId,
+                });
+            } else if (data.action === CRUD_ACTIONS.EDIT) {
+                let doctorMarkdown = await db.Markdown.findOne({
+                    where: { doctorId: data.doctorId },
+                    raw: false,
+                });
+                if (doctorMarkdown) {
+                    (doctorMarkdown.contentHTML = data.contentHTML),
+                        (doctorMarkdown.contentMarkdown = data.contentMarkdown),
+                        (doctorMarkdown.description = data.description),
+                        // (doctorMarkdown.updatedAt = new Date()),
+                        await doctorMarkdown.save();
+                }
+            }
+            // Upsert infor doctor table
+            let doctorInfor = await db.Doctor_Info.findOne({
+                where: {
+                    doctorId: data.doctorId,
+                },
+                raw: false,
+            });
+            if (doctorInfor) {
+                // update
+                (doctorInfor.priceId = data.selectedPrice),
+                    (doctorInfor.provinceId = data.selectedProvince),
+                    (doctorInfor.paymentId = data.selectedPayment),
+                    (doctorInfor.clinicName = data.clinicName),
+                    (doctorInfor.clinicAddress = data.clinicAddress),
+                    (doctorInfor.note = data.note);
+                await doctorInfor.save();
+            } else {
+                // create
+                await db.Doctor_Info.create({
+                    doctorId: data.doctorId,
+                    priceId: data.selectedPrice,
+                    provinceId: data.selectedProvince,
+                    paymentId: data.selectedPayment,
+                    clinicName: data.clinicName,
+                    clinicAddress: data.clinicAddress,
+                    note: data.note,
                 });
             }
+            resolve({
+                errCode: 0,
+                errMessage: "Save information doctor successfully",
+            });
         } catch (error) {
             reject(error);
         }
