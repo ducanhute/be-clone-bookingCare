@@ -1,6 +1,7 @@
 import db from "../models/index";
 import { CRUD_ACTIONS } from "../utils/constant";
 import _ from "lodash";
+import { senSimpleEmail } from "../services/emailService";
 
 let postBookAppointment = (data) => {
     return new Promise(async (resolve, reject) => {
@@ -11,6 +12,13 @@ let postBookAppointment = (data) => {
                     errMessage: "Missing required parameter",
                 });
             } else {
+                // Semd confirm mail
+                await senSimpleEmail({
+                    patientName: "Duc Anh",
+                    doctorName: "Hung Dang Viet",
+                    time: "9hm,- 23/9/2023",
+                    redirectLink: "https://www.google.com.vn/",
+                });
                 // If find user return user else create new user
                 let user = await db.User.findOrCreate({
                     where: {
