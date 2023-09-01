@@ -5,7 +5,7 @@ import { senSimpleEmail } from "../services/emailService";
 import { v4 as uuidv4 } from "uuid";
 
 let buildUrlEmail = (doctorId, token) => {
-    let result = `${process.env.REACT_URL}/verify-booking?token=${token}=&doctorId=${doctorId}`;
+    let result = `${process.env.REACT_URL}/verify-booking?token=${token}&doctorId=${doctorId}`;
     return result;
 };
 let postBookAppointment = (data) => {
@@ -17,17 +17,6 @@ let postBookAppointment = (data) => {
                     errMessage: "Missing required parameter",
                 });
             } else {
-                // Semd confirm mail
-                let token = uuidv4();
-                await senSimpleEmail({
-                    patientName: data.fullName,
-                    doctorName: "Hung Dang Viet",
-                    time: data.timeString,
-                    redirectLink: buildUrlEmail(data.doctorId, token),
-                    language: data.language,
-                    doctorName: data.doctorName,
-                    address: data.address,
-                });
                 // If find user return user else create new user
                 let user = await db.User.findOrCreate({
                     where: {
@@ -41,36 +30,34 @@ let postBookAppointment = (data) => {
                 // If patient does not have booked an apointment before the create a new one
                 // otherwise update the existing one
                 if (user && user[0]) {
-                    // await db.Booking.findOrCreate({
-                    //     where: {
-                    //         patientId: user[0].id,
-                    //     },
-                    //     defaults: {
-                    //         statusId: "S1",
-                    //         doctorId: data.doctorId,
-                    //         patientId: user[0].id,
-                    //         date: data.date,
-                    //         timeType: data.timeType,
-                    //     },
-                    // });
                     let booking = await db.Booking.findOne({
                         where: {
                             patientId: user[0].id,
                         },
                         raw: false,
                     });
+                    // User have booked appointment
                     if (booking) {
                         (booking.statusId = "S1"),
                             (booking.doctorId = data.doctorId),
                             (booking.date = data.date),
                             (booking.timeType = data.timeType),
-                            // (booking.token = token);
                             await booking.save();
+                        await senSimpleEmail({
+                            patientName: data.fullName,
+                            time: data.timeString,
+                            redirectLink: buildUrlEmail(data.doctorId, booking.token),
+                            language: data.language,
+                            doctorName: data.doctorName,
+                            address: data.address,
+                        });
                         resolve({
                             errCode: 0,
                             errMessage: "Update booking infomation successfully",
                         });
                     } else {
+                        // user havenot booked appointment
+                        let token = uuidv4();
                         await db.Booking.create({
                             statusId: "S1",
                             doctorId: data.doctorId,
@@ -78,6 +65,15 @@ let postBookAppointment = (data) => {
                             date: data.date,
                             timeType: data.timeType,
                             token: token,
+                        });
+                        // Semd confirm mail
+                        await senSimpleEmail({
+                            patientName: data.fullName,
+                            time: data.timeString,
+                            redirectLink: buildUrlEmail(data.doctorId, token),
+                            language: data.language,
+                            doctorName: data.doctorName,
+                            address: data.address,
                         });
                         resolve({
                             errCode: 0,
