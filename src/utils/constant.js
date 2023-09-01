@@ -4,3 +4,7 @@ export const CRUD_ACTIONS = {
     DELETE: "DELETE",
     READ: "READ",
 };
+export const LANGUAGE = {
+    VI: "vi",
+    EN: "en",
+};

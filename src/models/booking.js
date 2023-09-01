@@ -13,6 +13,7 @@ module.exports = (sequelize, DataTypes) => {
             patientId: DataTypes.INTEGER,
             date: DataTypes.STRING, // Save instring format for later use easily
             timeType: DataTypes.STRING,
+            token: DataTypes.STRING,
         },
         {
             sequelize,
