@@ -33,7 +33,6 @@ let getAllSpecialty = () => {
                     exclude: [""],
                 },
             });
-            console.log(res);
             if (res && res.length > 0) {
                 res = res.map((item) => {
                     item.image = new Buffer(item.image, "base64").toString("binary");

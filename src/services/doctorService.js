@@ -69,6 +69,8 @@ let saveDetailInforDoctor = (data) => {
                 "clinicName",
                 "clinicAddress",
                 "note",
+                // "clinicId",
+                "specialtyId",
             ];
             let errMessageField = [
                 "Content Markdown",
@@ -82,10 +84,12 @@ let saveDetailInforDoctor = (data) => {
                 "Clinic Name",
                 "Clinic Address",
                 "Note",
+                // "Clinic",
+                "Specialty",
             ];
             for (let i = 0; i < dataField.length; i++) {
                 if (!data[dataField[i]]) {
-                    resolve({
+                    return resolve({
                         errCode: 1,
                         errMessage: `Missing ${errMessageField[i]} field`,
                     });
@@ -127,6 +131,8 @@ let saveDetailInforDoctor = (data) => {
                     (doctorInfor.clinicName = data.clinicName),
                     (doctorInfor.clinicAddress = data.clinicAddress),
                     (doctorInfor.note = data.note);
+                doctorInfor.clinicId = data.clinicId;
+                doctorInfor.specialtyId = data.specialtyId;
                 await doctorInfor.save();
             } else {
                 // create
@@ -138,6 +144,8 @@ let saveDetailInforDoctor = (data) => {
                     clinicName: data.clinicName,
                     clinicAddress: data.clinicAddress,
                     note: data.note,
+                    clinicId: data.clinicId,
+                    specialtyId: data.specialtyId,
                 });
             }
             resolve({
