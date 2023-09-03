@@ -1,37 +1,40 @@
-'use strict';
+"use strict";
 module.exports = {
     up: async (queryInterface, Sequelize) => {
-        await queryInterface.createTable('clinics', {
+        await queryInterface.createTable("clinics", {
             // Trường id tự tăng
             id: {
                 allowNull: false,
                 autoIncrement: true,
                 primaryKey: true,
-                type: Sequelize.INTEGER
+                type: Sequelize.INTEGER,
             },
             name: {
-                type: Sequelize.STRING
+                type: Sequelize.STRING,
             },
             address: {
-                type: Sequelize.STRING
+                type: Sequelize.STRING,
             },
-            description: {
-                type: Sequelize.TEXT
+            descriptionMarkdown: {
+                type: Sequelize.TEXT,
+            },
+            descriptionHTML: {
+                type: Sequelize.TEXT,
             },
             image: {
-                type: Sequelize.INTEGER
+                type: Sequelize.BLOB("long"),
             },
             createdAt: {
                 allowNull: false,
-                type: Sequelize.DATE
+                type: Sequelize.DATE,
             },
             updatedAt: {
                 allowNull: false,
-                type: Sequelize.DATE
-            }
+                type: Sequelize.DATE,
+            },
         });
     },
     down: async (queryInterface, Sequelize) => {
-        await queryInterface.dropTable('clinics');
-    }
+        await queryInterface.dropTable("clinics");
+    },
 };
