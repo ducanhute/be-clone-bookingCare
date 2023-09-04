@@ -25,6 +25,10 @@ let postBookAppointment = (data) => {
                     defaults: {
                         email: data.email,
                         roleId: "R3",
+                        gender: data.gender,
+                        address: data.address,
+                        firstName: data.fullName,
+                        phoneNumber: data.phoneNumber,
                     },
                 });
                 // If patient does not have booked an apointment before the create a new one
