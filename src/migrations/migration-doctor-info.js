@@ -37,11 +37,22 @@ module.exports = {
                 type: Sequelize.STRING,
                 allowNull: false,
             },
+            clinicAddressEn: {
+                type: Sequelize.STRING,
+                allowNull: false,
+            },
             clinicName: {
                 type: Sequelize.STRING,
                 allowNull: false,
             },
+            clinicNameEn: {
+                type: Sequelize.STRING,
+                allowNull: false,
+            },
             note: {
+                type: Sequelize.STRING,
+            },
+            noteEn: {
                 type: Sequelize.STRING,
             },
             count: {

@@ -10,7 +10,7 @@ let handleUserLogin = (email, password) => {
             if (isExit) {
                 // Tìm đến user có email khớp trong hệ thống
                 let user = await db.User.findOne({
-                    attributes: ["email", "roleId", "password", "firstName", "lastName"],
+                    attributes: ["id", "email", "roleId", "password", "firstName", "lastName"],
                     where: { email: email },
                     raw: true,
                 });

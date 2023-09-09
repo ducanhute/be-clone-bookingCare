@@ -32,9 +32,7 @@ let getAllClinic = () => {
     return new Promise(async (resolve, reject) => {
         try {
             let res = await db.clinic.findAll({
-                attributes: {
-                    exclude: [""],
-                },
+                attributes: ["id", "descriptionHTML", "descriptionMarkdown", "name", "image", "nameEn"],
             });
             if (res && res.length > 0) {
                 res = res.map((item) => {

@@ -4,17 +4,27 @@ const db = require("../models");
 let crateSpecialty = (data) => {
     return new Promise(async (resolve, reject) => {
         try {
-            if ((!data.name && !data.imageBase64 && !data.descriptionHTML) || !data.descriptionMarkdown) {
+            if (
+                !data.name &&
+                !data.imageBase64 &&
+                !data.descriptionHTMLVi &&
+                !data.descriptionMarkdownVi &&
+                !data.descriptionHTMLEn &&
+                !data.descriptionMarkdownEn
+            ) {
                 resolve({
                     errCode: 1,
                     errMessage: "Missing required parameter",
                 });
             } else {
                 await db.specialty.create({
-                    name: data.name,
+                    nameVi: data.nameVi,
+                    nameEn: data.nameEn,
                     image: data.imageBase64,
-                    descriptionHTML: data.descriptionHTML,
-                    descriptionMarkdown: data.descriptionMarkdown,
+                    descriptionHTMLVi: data.descriptionHTMLVi,
+                    descriptionHTMLEn: data.descriptionHTMLEn,
+                    descriptionMarkdownVi: data.descriptionMarkdownVi,
+                    descriptionMarkdownEn: data.descriptionMarkdownEn,
                 });
                 resolve({
                     errCode: 0,
@@ -36,7 +46,7 @@ let getAllSpecialty = () => {
             });
             if (res && res.length > 0) {
                 res = res.map((item) => {
-                    item.image = new Buffer(item.image, "base64").toString("binary");
+                    item.image = new Buffer.from(item.image, "base64").toString("binary");
                     return item;
                 });
             }
@@ -65,7 +75,7 @@ let getDetailSpecialtyById = (id, location) => {
                     where: {
                         id: id,
                     },
-                    attributes: ["descriptionHTML", "descriptionMarkdown"],
+                    attributes: ["descriptionHTMLVi", "descriptionMarkdownVi", "descriptionHTMLEn", "descriptionMarkdownEn"],
                 });
                 if (data) {
                     let doctorSpecialty = [];

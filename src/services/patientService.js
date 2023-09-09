@@ -54,6 +54,7 @@ let postBookAppointment = (data) => {
                             language: data.language,
                             doctorName: data.doctorName,
                             address: data.address,
+                            email: data.email,
                         });
                         resolve({
                             errCode: 0,
@@ -78,6 +79,7 @@ let postBookAppointment = (data) => {
                             language: data.language,
                             doctorName: data.doctorName,
                             address: data.address,
+                            email: data.email,
                         });
                         resolve({
                             errCode: 0,
@@ -109,8 +111,7 @@ let postVerifyBookAppointment = (data) => {
                     raw: false,
                 });
                 if (appointment) {
-                    appointment.statusId = "S2";
-                    await appointment.save();
+                    (appointment.statusId = "S2"), await appointment.save();
                     resolve({
                         errCode: 0,
                         errMessage: "Confirmed successfully",

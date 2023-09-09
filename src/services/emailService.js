@@ -17,11 +17,42 @@ let senSimpleEmail = async (dataSend) => {
     // send mail with defined transport object
     const info = await transporter.sendMail({
         from: '"Bookingcare VN" <haducanh660@gmail.com>', // sender address
-        to: "anhhdtech@gmail.com", // list of receivers
-        subject: "Confirmation of your appointment", // Subject line
+        to: dataSend.email, // list of receivers
+        subject: getSubject(dataSend), // Subject line
         html: getBodyHtmlEmail(dataSend),
     });
 };
+let sendAttachment = async (dataSend) => {
+    const transporter = nodemailer.createTransport({
+        type: "SMTP",
+        host: "smtp.gmail.com",
+        secure: true,
+        port: 465,
+        auth: {
+            user: process.env.EMAI_APP,
+            pass: process.env.EMAIL_APP_PASSWORD,
+        },
+    });
+    // send mail with defined transport object
+    const info = await transporter.sendMail({
+        from: '"Bookingcare VN" <haducanh660@gmail.com>', // sender address
+        to: dataSend.email, // list of receivers
+        subject: getSubject(dataSend), // Subject line
+        attachments: [
+            {
+                filename: `remedy-${dataSend.patientId}-${new Date().getTime()}.png`,
+                content: dataSend.imgBase64.split("base64,")[1],
+                encoding: "base64",
+            },
+        ],
+        html: getBodyHtmlEmailRemedy(dataSend),
+    });
+};
+let getSubject = (dataSend) => {
+    let subject = dataSend.language === LANGUAGE.VI ? "Xác nhận lịch hẹn của bạn" : "Confirmation of your appointment";
+    return subject;
+};
+
 let getBodyHtmlEmail = (dataSend) => {
     let result = "";
     if (dataSend.language === LANGUAGE.VI) {
@@ -66,6 +97,27 @@ let getBodyHtmlEmail = (dataSend) => {
     }
     return result;
 };
+let getBodyHtmlEmailRemedy = (dataSend) => {
+    let result = "";
+    if (dataSend.language === LANGUAGE.VI) {
+        result = `<b>Xin chào ${dataSend.patientName}</b>
+        <p>Bạn nhận được mail này vì đã khám bệnh thành công. Cảm ơn bạn đã sử dụng dịch vụ của chúng tôi.</p>
+        <p>Thông tin đơn thuốc của bạn được gửi trong file đính kèm</p>
+        <p><b>Xin cảm ơn,</b></p>
+        <p>Booking care VN.</p>
+        `;
+    }
+    if (dataSend.language === LANGUAGE.EN) {
+        result = `<b>Hi ${dataSend.patientName}!</b>
+        <p>You received this email because your medical examination was successful. Thank you for using our service.</p>
+        <p>Your prescription information is included in the attachment</p>
+        <p><b>Thank you,</b></p>
+        <p>Booking care VN.</p>
+        `;
+    }
+    return result;
+};
 module.exports = {
     senSimpleEmail,
+    sendAttachment,
 };

@@ -9,13 +9,22 @@ module.exports = {
                 primaryKey: true,
                 type: Sequelize.INTEGER,
             },
-            name: {
+            nameVi: {
                 type: Sequelize.STRING,
             },
-            descriptionHTML: {
+            nameEn: {
+                type: Sequelize.STRING,
+            },
+            descriptionHTMLVi: {
                 type: Sequelize.TEXT,
             },
-            descriptionMarkdown: {
+            descriptionMarkdownVi: {
+                type: Sequelize.TEXT,
+            },
+            descriptionHTMLEn: {
+                type: Sequelize.TEXT,
+            },
+            descriptionMarkdownEn: {
                 type: Sequelize.TEXT,
             },
             image: {

@@ -13,11 +13,23 @@ module.exports = {
                 allowNull: false,
                 type: Sequelize.TEXT("long"),
             },
+            contentHTMLEn: {
+                allowNull: false,
+                type: Sequelize.TEXT("long"),
+            },
             contentMarkdown: {
                 allowNull: false,
                 type: Sequelize.TEXT("long"),
             },
+            contentMarkdownEn: {
+                allowNull: false,
+                type: Sequelize.TEXT("long"),
+            },
             description: {
+                allowNull: true,
+                type: Sequelize.TEXT("long"),
+            },
+            descriptionEn: {
                 allowNull: true,
                 type: Sequelize.TEXT("long"),
             },
