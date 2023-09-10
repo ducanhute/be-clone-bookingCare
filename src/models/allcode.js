@@ -11,7 +11,7 @@ module.exports = (sequelize, DataTypes) => {
             // define association here
             Allcode.hasMany(models.User, { foreignKey: "positionId", source: "keyMap", as: "positionData" });
             Allcode.hasMany(models.User, { foreignKey: "gender", source: "keyMap", as: "genderData" });
-            Allcode.hasMany(models.schedule, { foreignKey: "timeType", as: "timeTypeData" });
+            Allcode.hasMany(models.Schedule, { foreignKey: "timeType", as: "timeTypeData" });
             //Map to doctor info
             Allcode.hasMany(models.Doctor_Info, { foreignKey: "priceId", as: "priceData" });
             Allcode.hasMany(models.Doctor_Info, { foreignKey: "paymentId", as: "paymentData" });
@@ -29,6 +29,7 @@ module.exports = (sequelize, DataTypes) => {
         {
             sequelize,
             modelName: "Allcode",
+            freezeTableName: true,
         }
     );
     return Allcode;

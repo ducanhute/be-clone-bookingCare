@@ -1,7 +1,7 @@
 "use strict";
 module.exports = {
     up: async (queryInterface, Sequelize) => {
-        await queryInterface.createTable("clinics", {
+        await queryInterface.createTable("Clinic", {
             // Trường id tự tăng
             id: {
                 allowNull: false,
@@ -12,13 +12,25 @@ module.exports = {
             name: {
                 type: Sequelize.STRING,
             },
+            nameEn: {
+                type: Sequelize.STRING,
+            },
             address: {
+                type: Sequelize.STRING,
+            },
+            addressEn: {
                 type: Sequelize.STRING,
             },
             descriptionMarkdown: {
                 type: Sequelize.TEXT,
             },
+            descriptionMarkdownEn: {
+                type: Sequelize.TEXT,
+            },
             descriptionHTML: {
+                type: Sequelize.TEXT,
+            },
+            descriptionHTMLEn: {
                 type: Sequelize.TEXT,
             },
             image: {
@@ -35,6 +47,6 @@ module.exports = {
         });
     },
     down: async (queryInterface, Sequelize) => {
-        await queryInterface.dropTable("clinics");
+        await queryInterface.dropTable("Clinic");
     },
 };

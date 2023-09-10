@@ -200,7 +200,7 @@ let getDetailDoctorById = (id) => {
             } else {
                 let data = await db.User.findOne({
                     where: {
-                        id: id,
+                        id: +id,
                     },
                     attributes: {
                         exclude: ["password"],
@@ -261,8 +261,8 @@ let bulkCreateSchedule = (data) => {
                         return item;
                     });
                 }
-                let existingRecords = await db.schedule.findAll({
-                    where: { doctorId: data.doctorId, date: data.date },
+                let existingRecords = await db.Schedule.findAll({
+                    where: { doctorId: data.doctorId, date: "" + data.date },
                     attributes: ["timeType", "date", "doctorId", "maxNumber"],
                     raw: true,
                 });
@@ -272,7 +272,7 @@ let bulkCreateSchedule = (data) => {
                 });
                 // If have the difference then save to database
                 if (toCreate && toCreate.length > 0) {
-                    await db.schedule.bulkCreate(toCreate);
+                    await db.Schedule.bulkCreate(toCreate);
                     resolve({
                         errCode: 0,
                         errMessage: "Save schedule Sucessfully",
@@ -298,7 +298,7 @@ let getScheduleByDate = (doctorId, date) => {
                     errMessage: "Missing required parameter",
                 });
             } else {
-                let data = await db.schedule.findAll({
+                let data = await db.Schedule.findAll({
                     where: {
                         doctorId: doctorId,
                         date: date,

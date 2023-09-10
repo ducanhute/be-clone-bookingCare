@@ -1,7 +1,7 @@
 "use strict";
 module.exports = {
     up: async (queryInterface, Sequelize) => {
-        await queryInterface.createTable("bookings", {
+        await queryInterface.createTable("Booking", {
             // Trường id tự tăng
             id: {
                 allowNull: false,
@@ -38,6 +38,6 @@ module.exports = {
         });
     },
     down: async (queryInterface, Sequelize) => {
-        await queryInterface.dropTable("bookings");
+        await queryInterface.dropTable("Booking");
     },
 };

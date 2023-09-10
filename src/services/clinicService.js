@@ -10,7 +10,7 @@ let createClinic = (data) => {
                     errMessage: "Missing required parameter",
                 });
             } else {
-                await db.clinic.create({
+                await db.Clinic.create({
                     name: data.name,
                     image: data.imageBase64,
                     address: data.address,
@@ -31,12 +31,12 @@ let createClinic = (data) => {
 let getAllClinic = () => {
     return new Promise(async (resolve, reject) => {
         try {
-            let res = await db.clinic.findAll({
+            let res = await db.Clinic.findAll({
                 attributes: ["id", "descriptionHTML", "descriptionMarkdown", "name", "image", "nameEn"],
             });
             if (res && res.length > 0) {
                 res = res.map((item) => {
-                    item.image = new Buffer(item.image, "base64").toString("binary");
+                    item.image = new Buffer.from(item.image, "base64").toString("binary");
                     return item;
                 });
             }
@@ -59,7 +59,7 @@ let getDetailClinicById = (id) => {
                     errMessage: "Missing parameter",
                 });
             } else {
-                let data = await db.clinic.findOne({
+                let data = await db.Clinic.findOne({
                     where: {
                         id: id,
                     },

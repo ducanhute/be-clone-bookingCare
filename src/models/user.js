@@ -8,7 +8,7 @@ module.exports = (sequelize, DataTypes) => {
             User.belongsTo(models.Allcode, { foreignKey: "gender", targetKey: "keyMap", as: "genderData" });
             User.hasOne(models.Markdown, { foreignKey: "doctorId" });
             User.hasOne(models.Doctor_Info, { foreignKey: "doctorId" });
-            User.hasMany(models.schedule, { foreignKey: "doctorId", as: "doctorData" });
+            User.hasMany(models.Schedule, { foreignKey: "doctorId", as: "doctorData" });
             User.hasMany(models.Booking, { foreignKey: "patientId", as: "patientData" });
         }
     }
@@ -20,7 +20,7 @@ module.exports = (sequelize, DataTypes) => {
             lastName: DataTypes.STRING,
             address: DataTypes.STRING,
             phoneNumber: DataTypes.STRING,
-            image: DataTypes.STRING,
+            image: DataTypes.BLOB("long"),
             gender: DataTypes.STRING,
             roleId: DataTypes.STRING,
             positionId: DataTypes.STRING,
@@ -28,6 +28,7 @@ module.exports = (sequelize, DataTypes) => {
         {
             sequelize,
             modelName: "User",
+            freezeTableName: true,
         }
     );
     return User;

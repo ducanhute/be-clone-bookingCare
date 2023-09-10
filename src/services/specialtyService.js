@@ -17,7 +17,7 @@ let crateSpecialty = (data) => {
                     errMessage: "Missing required parameter",
                 });
             } else {
-                await db.specialty.create({
+                await db.Specialty.create({
                     nameVi: data.nameVi,
                     nameEn: data.nameEn,
                     image: data.imageBase64,
@@ -39,7 +39,7 @@ let crateSpecialty = (data) => {
 let getAllSpecialty = () => {
     return new Promise(async (resolve, reject) => {
         try {
-            let res = await db.specialty.findAll({
+            let res = await db.Specialty.findAll({
                 attributes: {
                     exclude: [""],
                 },
@@ -71,7 +71,7 @@ let getDetailSpecialtyById = (id, location) => {
             } else {
                 let data = {};
 
-                data = await db.specialty.findOne({
+                data = await db.Specialty.findOne({
                     where: {
                         id: id,
                     },

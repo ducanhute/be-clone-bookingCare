@@ -1,7 +1,7 @@
 "use strict";
 module.exports = {
     up: async (queryInterface, Sequelize) => {
-        await queryInterface.createTable("markdowns", {
+        await queryInterface.createTable("Markdown", {
             // Trường id tự tăng
             id: {
                 allowNull: false,
@@ -56,6 +56,6 @@ module.exports = {
         });
     },
     down: async (queryInterface, Sequelize) => {
-        await queryInterface.dropTable("markdowns");
+        await queryInterface.dropTable("Markdown");
     },
 };
