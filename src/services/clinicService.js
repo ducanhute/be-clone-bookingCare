@@ -33,6 +33,7 @@ let getAllClinic = () => {
         try {
             let res = await db.Clinic.findAll({
                 attributes: ["id", "descriptionHTML", "descriptionMarkdown", "name", "image", "nameEn"],
+                limit: 8,
             });
             if (res && res.length > 0) {
                 res = res.map((item) => {

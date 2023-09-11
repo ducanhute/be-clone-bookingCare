@@ -43,6 +43,7 @@ let getAllSpecialty = () => {
                 attributes: {
                     exclude: [""],
                 },
+                limit: 8,
             });
             if (res && res.length > 0) {
                 res = res.map((item) => {

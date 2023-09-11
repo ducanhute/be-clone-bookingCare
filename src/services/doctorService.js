@@ -20,6 +20,7 @@ let getTopDoctorHome = (limitInput) => {
                     roleId: "R2",
                 },
                 limit: limitInput,
+                offset: 21,
                 order: [["createdAt", "DESC"]],
                 attributes: {
                     exclude: ["password"],
